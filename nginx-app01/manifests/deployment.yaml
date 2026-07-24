@@ -61,7 +61,7 @@ spec:
               cat <<EOF > /html/index.html
               <!DOCTYPE html>
               <html>
-              <head><title>ArgoCD Lab</title>
+              <head><title>ArgoCD - NGINX - App01</title>
               <style>
                 body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #1a1a2e; color: #e0e0e0; }
                 .card { background: #16213e; padding: 2rem 3rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); text-align: center; }
@@ -69,14 +69,40 @@ spec:
                 .info { font-size: 1.1rem; margin: 0.5rem 0; }
                 .label { color: #888; }
                 .value { color: #4fc3f7; font-family: monospace; font-weight: bold; }
+                .history { margin-top: 1.5rem; text-align: left; max-height: 150px; overflow-y: auto; }
+                .history-entry { font-size: 0.85rem; font-family: monospace; padding: 2px 0; color: #aaa; }
+                .history-entry:first-child { color: #4fc3f7; font-weight: bold; }
               </style></head>
               <body><div class="card">
                 <h1>ArgoCD - NGINX - App01</h1>
-                <p class="info"><span class="label">Pod: </span><span class="value">${POD_NAME}</span></p>
-                <p class="info"><span class="label">Pod IP: </span><span class="value">${POD_IP}</span></p>
-                <p class="info"><span class="label">Node: </span><span class="value">${NODE_NAME}</span></p>
-                <p style="margin-top:1.5rem;color:#666;font-size:0.9rem;">Refresh to see load balancing across pods</p>
-              </div></body></html>
+                <p class="info"><span class="label">Pod: </span><span class="value" id="pod">${POD_NAME}</span></p>
+                <p class="info"><span class="label">Pod IP: </span><span class="value" id="ip">${POD_IP}</span></p>
+                <p class="info"><span class="label">Node: </span><span class="value" id="node">${NODE_NAME}</span></p>
+                <div class="history"><p style="color:#666;font-size:0.9rem;margin:0 0 0.5rem 0;">Request history (auto-refreshes every 2s):</p><div id="log"></div></div>
+              </div>
+              <script>
+                const basePath = window.location.pathname.replace(/\/\$/, '');
+                async function poll() {
+                  try {
+                    const r = await fetch(basePath + '/pod-info.json', {cache:'no-store'});
+                    const d = await r.json();
+                    document.getElementById('pod').textContent = d.pod;
+                    document.getElementById('ip').textContent = d.ip;
+                    document.getElementById('node').textContent = d.node;
+                    const el = document.createElement('div');
+                    el.className = 'history-entry';
+                    el.textContent = new Date().toLocaleTimeString() + ' → ' + d.pod;
+                    const log = document.getElementById('log');
+                    log.insertBefore(el, log.firstChild);
+                  } catch(e) {}
+                }
+                setInterval(poll, 2000);
+                poll();
+              </script>
+              </body></html>
+              EOF
+              cat <<EOF > /html/pod-info.json
+              {"pod":"${POD_NAME}","ip":"${POD_IP}","node":"${NODE_NAME}"}
               EOF
           volumeMounts:
             - name: html
