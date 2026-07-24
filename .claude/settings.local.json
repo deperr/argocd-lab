@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(minikube status *)",
+      "Bash(kubectl version *)",
+      "Bash(kubectl create *)",
+      "Bash(kubectl apply *)",
+      "Bash(kubectl wait *)"
+    ]
+  }
+}
