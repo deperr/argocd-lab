@@ -5,6 +5,7 @@ metadata:
   namespace: app-02
   annotations:
     nginx.ingress.kubernetes.io/upstream-hash-by: ""
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
