@@ -71,7 +71,7 @@ spec:
                 .value { color: #e8a838; font-family: monospace; font-weight: bold; }
               </style></head>
               <body><div class="card">
-                <h1>App-02</h1>
+                <h1>ArgoCD - NGINX - App02</h1>
                 <p class="info"><span class="label">Pod: </span><span class="value">${POD_NAME}</span></p>
                 <p class="info"><span class="label">Pod IP: </span><span class="value">${POD_IP}</span></p>
                 <p class="info"><span class="label">Node: </span><span class="value">${NODE_NAME}</span></p>
