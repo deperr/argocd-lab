@@ -5,7 +5,10 @@
       "Bash(kubectl version *)",
       "Bash(kubectl create *)",
       "Bash(kubectl apply *)",
-      "Bash(kubectl wait *)"
+      "Bash(kubectl wait *)",
+      "Bash(git remote *)",
+      "Bash(kubectl logs *)",
+      "Bash(kubectl get *)"
     ]
   }
 }

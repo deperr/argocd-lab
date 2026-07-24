@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
-  namespace: sample-app
+  namespace: nginx-app02
 data:
   default.conf: |
     server {
