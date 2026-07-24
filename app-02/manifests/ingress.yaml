@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-demo
-  namespace: sample-app
+  namespace: app-02
   annotations:
     nginx.ingress.kubernetes.io/upstream-hash-by: ""
 spec:
@@ -10,7 +10,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /app-01
+          - path: /app-02
             pathType: Prefix
             backend:
               service:
