@@ -20,3 +20,65 @@ spec:
           image: nginx:1.27
           ports:
             - containerPort: 80
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+      initContainers:
+        - name: init-page
+          image: busybox:1.36
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          command:
+            - sh
+            - -c
+            - |
+              cat <<EOF > /html/index.html
+              <!DOCTYPE html>
+              <html>
+              <head><title>ArgoCD Lab</title>
+              <style>
+                body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #1a1a2e; color: #e0e0e0; }
+                .card { background: #16213e; padding: 2rem 3rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); text-align: center; }
+                h1 { color: #0f9b58; margin-bottom: 1.5rem; }
+                .info { font-size: 1.1rem; margin: 0.5rem 0; }
+                .label { color: #888; }
+                .value { color: #4fc3f7; font-family: monospace; font-weight: bold; }
+              </style></head>
+              <body><div class="card">
+                <h1>ArgoCD Lab - Nginx Demo</h1>
+                <p class="info"><span class="label">Pod: </span><span class="value">${POD_NAME}</span></p>
+                <p class="info"><span class="label">Pod IP: </span><span class="value">${POD_IP}</span></p>
+                <p class="info"><span class="label">Node: </span><span class="value">${NODE_NAME}</span></p>
+                <p style="margin-top:1.5rem;color:#666;font-size:0.9rem;">Refresh to see load balancing across pods</p>
+              </div></body></html>
+              EOF
+          volumeMounts:
+            - name: html
+              mountPath: /html
+      volumes:
+        - name: html
+          emptyDir: {}
