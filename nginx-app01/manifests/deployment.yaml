@@ -94,6 +94,7 @@ spec:
                     el.textContent = new Date().toLocaleTimeString() + ' -> ' + d.pod;
                     const log = document.getElementById('log');
                     log.insertBefore(el, log.firstChild);
+                    while (log.children.length > 5) log.removeChild(log.lastChild);
                   } catch(e) {}
                 }
                 setInterval(poll, 2000);
