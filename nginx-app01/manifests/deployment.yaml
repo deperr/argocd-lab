@@ -91,7 +91,7 @@ spec:
                     document.getElementById('node').textContent = d.node;
                     const el = document.createElement('div');
                     el.className = 'history-entry';
-                    el.textContent = new Date().toLocaleTimeString() + ' → ' + d.pod;
+                    el.textContent = new Date().toLocaleTimeString() + ' ->' + d.pod;
                     const log = document.getElementById('log');
                     log.insertBefore(el, log.firstChild);
                   } catch(e) {}
