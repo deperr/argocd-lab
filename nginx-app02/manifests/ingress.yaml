@@ -5,14 +5,15 @@ metadata:
   namespace: nginx-app02
   annotations:
     nginx.ingress.kubernetes.io/upstream-hash-by: ""
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
     - http:
         paths:
-          - path: /nginx-app02
-            pathType: Prefix
+          - path: /nginx-app02(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: nginx-demo
